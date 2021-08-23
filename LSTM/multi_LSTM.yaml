@@ -1,0 +1,32 @@
+experiment_id: '073001_alicpu4v1_seconds_multiLSTM1'
+# random seed
+seed: 1029
+# model pretrained
+pretrained_model_path: './runs/072302_ali_cpu_second1LSTM/model.ckpt'
+# type of the cluster for different subspace
+cluster_type: '3-cluster'
+# the num of clusters
+cluster_num: 4
+# the director of the csv of each cluster
+input_csv_director: '../Clustering/cluster_data/ali_cpu_seconds_4/'
+# input time length
+sequence_length: 12
+# num of time step ahead to predict, 1 for the next
+pred_step: 1
+# input size of each time step
+input_size: 1
+# the hidden size of LSTM
+hidden_size: 256
+# the number of layers of LSTM
+num_layers: 3
+# the number of predict values
+num_classes: 1
+# batch size for training
+batch_size: 32
+# num of epochs for training
+num_epochs: 100
+# learning rate of adam optimizer
+learning_rate: 0.00024773919
+# weight decay for loss function
+weight_decay: 6.126231025e-05
+

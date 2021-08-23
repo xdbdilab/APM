@@ -1,0 +1,22 @@
+test_id: '080101_ali_cpu_seconds1'
+# random seed
+seed: 29
+# test data path
+test_csv_path: '../data/seconds_data12-10/ali_cpu_test.csv'
+# input time length
+sequence_length: 12
+# num of time step ahead to predict, 1 for the next
+pred_step: 1
+# input size of each time step
+input_size: 1
+cluster_num: 4
+cluster_type: '3-cluster'
+
+# disc paras
+disc_id: '073001_alicpu4v1_seconds_classifier1'
+disc_hidden_size: 128
+disc_num_layers: 3
+# model paras
+model_id: '073001_alicpu4v1_seconds_multiLSTM1'
+model_hidden_size: 256
+model_num_layers: 2

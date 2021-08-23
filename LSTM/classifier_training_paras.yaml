@@ -1,0 +1,28 @@
+experiment_id: '073001_alicpu4v1_seconds_classifier1'
+# random seed
+seed: 89
+# train data path
+train_csv_path: '../Clustering/cluster_data/ali_cpu_seconds_4/sampleLabels_train.csv'
+# test data path
+test_csv_path: '../Clustering/cluster_data/ali_cpu_seconds_4/sampleLabels_test.csv'
+# input time length
+sequence_length: 12
+# num of time step ahead to predict, 1 for the next
+num_learner: 4
+# input size of each time step
+input_size: 12
+# the hidden size of LSTM
+hidden_size: 128
+# the number of layers of LSTM
+num_layers: 3
+# the number of predict values
+num_classes: 4
+# batch size for training
+batch_size: 64
+# num of epochs for training
+num_epochs: 50
+# learning rate of adam optimizer.
+learning_rate: 0.001
+# weight decay for loss function
+weight_decay: 0
+

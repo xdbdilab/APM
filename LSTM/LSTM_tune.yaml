@@ -1,0 +1,28 @@
+experiment_id: '071101_ali_cpu_seconds12to1'
+# random seed
+seed: 129
+# train data path
+train_csv_path: '../data/seconds_data12-10/ali_cpu_train.csv'
+# test data path
+test_csv_path: '../data/seconds_data12-10/ali_cpu_test.csv'
+# input time length
+sequence_length: 12
+# num of time step ahead to predict, 1 for the next
+pred_step: 1
+# input size of each time step
+input_size: 1
+# the hidden size of LSTM
+hidden_size: 128
+# the number of layers of LSTM
+num_layers: 1
+# the number of predict values
+num_classes: 1
+# batch size for training
+batch_size: 32
+# num of epochs for training
+num_epochs: 100
+# learning rate of adam optimizer
+learning_rate: 0.00012518
+# weight decay for loss function
+weight_decay: 1.09204e-06
+
