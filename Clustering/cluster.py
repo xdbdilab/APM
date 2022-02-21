@@ -15,7 +15,7 @@ class Canopy:
         self.t1 = 0
         self.t2 = 0
 
-    # 设置初始阈值
+    # Set the initial threshold
     def setThreshold(self, t1, t2):
         if t1 > t2:
             self.t1 = t1
@@ -23,11 +23,10 @@ class Canopy:
         else:
             print('t1 needs to be larger than t2!')
 
-    # 使用欧式距离进行距离的计算
+    # Euclidean distance is used for distance calculation
     def euclideanDistance(self, vec1, vec2):
         return math.sqrt(((vec1 - vec2) ** 2).sum() / len(vec1))
 
-    # 根据当前dataset的长度随机选择一个下标
     def getRandIndex(self):
         return random.randint(0, len(self.dataset) - 1)
 
@@ -35,27 +34,25 @@ class Canopy:
         if self.t1 == 0:
             print('Please set the threshold.')
         else:
-            canopies = []  # 用于存放最终归类结果
+            canopies = []
             centers = []
             # while len(self.dataset) != 0:
-            # 20180324修改
             while len(self.dataset) > 1:
                 rand_index = self.getRandIndex()
-                current_center = self.dataset[rand_index]  # 随机获取一个中心点，定为P点
-                current_center_list = []  # 初始化P点的canopy类容器
-                delete_list = []  # 初始化P点的删除容器
+                current_center = self.dataset[rand_index]
+                current_center_list = []
+                delete_list = []
                 self.dataset = np.delete(self.dataset, rand_index,
-                                         0)  # 删除随机选择的中心点P
+                                         0)
                 for datum_j in range(len(self.dataset)):
                     datum = self.dataset[datum_j]
                     distance = self.euclideanDistance(
-                        current_center, datum)  # 计算选取的中心点P到每个点之间的距离
+                        current_center, datum)
                     if distance < self.t1:
-                        # 若距离小于t1，则将点归入P点的canopy类
                         current_center_list.append(datum)
                     if distance < self.t2:
-                        delete_list.append(datum_j)  # 若小于t2则归入删除容器
-                # 根据删除容器的下标，将元素从数据集中删除
+                        delete_list.append(datum_j)
+                # Removes an element from the dataset based on the subscript of the delete container
                 self.dataset = np.delete(self.dataset, delete_list, 0)
                 centers.append(current_center)
                 canopies.append((current_center, current_center_list))
@@ -65,7 +62,7 @@ class Canopy:
 
 class DataPre(object, ):
     def __init__(self, seq_length, seq_train, seq_interval, start_point):
-        # self.Centroid = centroid   # 聚类的个数
+        # self.Centroid = centroid
         # if dataset == 'Google':
         #     self.dataset = 'Google'
         #     self.path = "D:/PycharmProjects/APM/google2011usage.csv"
@@ -74,14 +71,13 @@ class DataPre(object, ):
         #     self.path = "D:/PycharmProjects/APM/ali2018usage.csv"
         self.train_path = None
         self.test_path = None
-        self.seq_length = seq_length  # 子序列的长度
-        self.seq_interval = seq_interval  # 子序列间的间隔长度
-        self.start_point = start_point  # 样本集的起始点（起始点不同，样本集不同）
-        self.seq_train = seq_train  # 样本训练的长度
+        self.seq_length = seq_length
+        self.seq_interval = seq_interval
+        self.start_point = start_point
+        self.seq_train = seq_train
 
     def data_partition(self):
         """
-        历史时间序列数据划分
         :return:
         """
         data = pd.read_csv(self.path)
@@ -89,14 +85,12 @@ class DataPre(object, ):
         if self.dataset == 'Google':
             cpu = data['cpu'] * 100
             for i in range(len(cpu)):
-                # 保留六位小数
                 cpu[i] = round(cpu[i], 6)
-            # 仅取前百分之十五
             # length = int(len(cpu) * 0.4)
             # cpu = cpu[:length]
         else:
             cpu = data['cpu']
-        train_length = int(len(cpu) * 0.8)  # 80%训练，20&测试集
+        train_length = int(len(cpu) * 0.8)
         train = cpu[int(len(cpu) * 0.2):]
         test = cpu[:int(len(cpu) * 0.2)]
         train.to_csv('train.csv')
@@ -114,11 +108,9 @@ class DataPre(object, ):
         data_new = np.reshape(Sax_data, (Sax_data.shape[0], Sax_data.shape[1]))
         return data_new
 
-    # 计算欧氏距离
     def distEclud(self, vecA, vecB):
         return np.sqrt(np.sum(np.power((vecA - vecB), 2)) / len(vecA))
 
-    # 余弦距离
     def distCos(self, vecA, vecB):
         # print(vecA)
         # print(vecB)
@@ -128,22 +120,17 @@ class DataPre(object, ):
 
     def make_sample(self):
         """
-        制作样本集，用于聚类
         :return:
         """
         path = [self.train_path, self.test_path]
         for filename in path:
             if filename == self.train_path:
-                # 制作训练集
                 raw_data = pd.read_csv(filename)
                 df = pd.DataFrame(raw_data)
                 data = []
-                # 一段子时间序列的长度
                 data_len = self.seq_length
-                # 子序列间的间隔，180就是半小时，360就是一小时
                 interval = self.seq_interval
                 if self.dataset == 'Ali':
-                    # 解决阿里数据集中原始时间序列中CPU的0值
                     for i in range(self.start_point, 14161 - data_len, interval):
                         tmp = []
                         for j in range(0, data_len, 1):
@@ -172,7 +159,6 @@ class DataPre(object, ):
                                 value = float(value)
                             tmp.append(value)
                         data.append(tmp)
-                # 进行标准化处理
                 mu = np.mean(data, axis=1)
                 sigma = np.std(data, axis=1)
                 standard = []
@@ -186,11 +172,9 @@ class DataPre(object, ):
                 standard.to_csv('D:/PycharmProjects/APM/LSTM_train.csv')
 
             else:
-                # 制作测试集
                 raw_test = pd.read_csv(filename)
                 df = pd.DataFrame(raw_test)
                 data = []
-                # 一段子时间序列的长度
                 data_len = self.seq_length
                 interval = self.seq_interval
                 for i in range(self.start_point, len(raw_test) - data_len, interval):
@@ -325,7 +309,6 @@ if __name__ == '__main__':
     df_data = df_data.loc[:,~df_data.columns.str.contains('^Unnamed')]
     df_data = df_data.loc[:,~df_data.columns.str.contains('index')]
     # print(df_data.head())
-    # # 随机取聚类数据
     df_data = df_data.sample(frac=0.5, replace=True, random_state=0, axis=0)
     # print(df_data.head())
     data_raw = df_data.values
