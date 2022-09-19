@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="afe9bf06-243f-410a-9179-fce9b0066942" name="gpu">
+        <fileTransfer rootFolder="/home/zby" accessType="SFTP" host="222.201.144.185" port="22" sshConfigId="98a5b429-e3bf-4a48-a807-60ae34382739" sshConfig="zby@222.201.144.185:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
