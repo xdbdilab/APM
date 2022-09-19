@@ -215,12 +215,19 @@ class DataPre(object, ):
         samples_df = samples_df.loc[:, ~samples_df.columns.str.contains('^Unnamed')]
         samples_df = samples_df.loc[:, ~samples_df.columns.str.contains('index')]
         samples = samples_df.values
+        """
+            1.样本sample,针对每一个聚类中心(4)，计算距离->dist
+            2.对于每一个样本选择最近的几个中心(3),加入倒相应的簇中 TODO:每个簇样本不均衡？
+            3.每个簇样本中取0.8用于训练，0.2作测试，生成每个弱学习器的数据集
+        """
         for sample in samples:
             dist = []
             for center in centers:
                 dist.append(self.distEclud(sample[:input_len], center))
             for i in range(sep_num):
                 index = np.argsort(np.array(dist))[i]
+                ## 这里聚类结果选前三
+                ## cluster_sample 为将样本划分后得到的簇(4,..) (:,0)为聚类中心
                 cluster_samples[index].append(sample)
         for i in range(len(centers)):
             train_length = int(len(cluster_samples[i]) * 0.8)
@@ -278,8 +285,12 @@ class DataPre(object, ):
             train_df.to_csv(cluster_train_paths[i], index=False)
             test_df.to_csv(cluster_test_paths[i], index=False)
 
-
+"""
+    0.经过data_preprocessing之后，划分得到训练集与测试集,样本长度12+10
+    1.
+"""
 if __name__ == '__main__':
+    print(os.getcwd())
     input_len = 12
     seq_train = 30
     pred_len = 10
@@ -294,7 +305,7 @@ if __name__ == '__main__':
 
     data_type = 'cpu'
     # data_type = 'mem'
-
+    # 样本12+10,seq_train=30
     cluster = DataPre(seq_length=input_len + pred_len, seq_train=seq_train, seq_interval=1, start_point=0)
     # cluster.data_partition()
     # cluster.make_sample()
@@ -305,20 +316,28 @@ if __name__ == '__main__':
         os.makedirs(outputdir)
     raw_data = pd.read_csv(inputfile_path)
     # print(raw_data.head())
+    ## 读取数据，处理掉第一列Unnamed
     df_data = pd.DataFrame(raw_data)
     df_data = df_data.loc[:,~df_data.columns.str.contains('^Unnamed')]
     df_data = df_data.loc[:,~df_data.columns.str.contains('index')]
     # print(df_data.head())
+    ## 有放回抽一半
     df_data = df_data.sample(frac=0.5, replace=True, random_state=0, axis=0)
     # print(df_data.head())
     data_raw = df_data.values
+    ## 4个聚类中心
     clustering_method = KMeans(num_cluster)
     # clustering_method = Birch(num_cluster)
+    # 只聚类前12个时间步(可见部分)
     clustering_method.fit(data_raw[:,:input_len])
     centers = clustering_method.cluster_centers_
     # print(centers.shape)
     center_df = pd.DataFrame(centers)
-    center_df.to_csv(os.path.join(outputdir, centerfile_path), index=False)
+    ## 持久化聚类中心的值,维度(4,12)
+    centerfile_path = os.path.join(outputdir, centerfile_path)
+    center_df.to_csv(centerfile_path, index=False)
+
     # cluster.random_sample_partition('/27T/resource-simulator/APM/ali_cpu_train.csv', num_cluster, input_len)
     # for i in range(1, 4):
+    # print()
     cluster.sample_partition_double(centerfile_path, inputfile_path, pred_len, num_cluster, input_len, outputdir, sep_num=3)

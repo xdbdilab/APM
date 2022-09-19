@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import time
-google_file = 'google2019_usages.csv'
+# google_file = 'google2019_usages.csv'
 ali_file = 'ali2018usage.csv'
 output_dir = './{0}_data12-10/'
 
@@ -73,22 +73,22 @@ if __name__ == '__main__':
         if not os.path.exists(op_dir):
             os.makedirs(op_dir)
         # google
-        cpu = get_csv_data(google_file, wl, pl, 'cpu', google_scale_table[scale])
-        mem = get_csv_data(google_file, wl, pl, 'mem', google_scale_table[scale])
-        train_cpu, test_cpu = train_test_split(cpu.values[:dataset_size, :], test_size=0.2, shuffle=False)
-        train_mem, test_mem = train_test_split(mem.values[:dataset_size, :], test_size=0.2, shuffle=False)
-        train_cpu = pd.DataFrame(train_cpu)
-        train_cpu.reset_index(inplace=True, drop=True)
-        train_cpu.to_csv(os.path.join(op_dir, cpu_train_file.format('google')))
-        test_cpu = pd.DataFrame(test_cpu)
-        test_cpu.reset_index(inplace=True, drop=True)
-        test_cpu.to_csv(os.path.join(op_dir, cpu_test_file.format('google')))
-        train_mem = pd.DataFrame(train_mem)
-        train_mem.reset_index(inplace=True, drop=True)
-        train_mem.to_csv(os.path.join(op_dir, mem_train_file.format('google')))
-        test_mem = pd.DataFrame(test_mem)
-        test_mem.reset_index(inplace=True, drop=True)
-        test_mem.to_csv(os.path.join(op_dir, mem_test_file.format('google')))
+        # cpu = get_csv_data(google_file, wl, pl, 'cpu', google_scale_table[scale])
+        # mem = get_csv_data(google_file, wl, pl, 'mem', google_scale_table[scale])
+        # train_cpu, test_cpu = train_test_split(cpu.values[:dataset_size, :], test_size=0.2, shuffle=False)
+        # train_mem, test_mem = train_test_split(mem.values[:dataset_size, :], test_size=0.2, shuffle=False)
+        # train_cpu = pd.DataFrame(train_cpu)
+        # train_cpu.reset_index(inplace=True, drop=True)
+        # train_cpu.to_csv(os.path.join(op_dir, cpu_train_file.format('google')))
+        # test_cpu = pd.DataFrame(test_cpu)
+        # test_cpu.reset_index(inplace=True, drop=True)
+        # test_cpu.to_csv(os.path.join(op_dir, cpu_test_file.format('google')))
+        # train_mem = pd.DataFrame(train_mem)
+        # train_mem.reset_index(inplace=True, drop=True)
+        # train_mem.to_csv(os.path.join(op_dir, mem_train_file.format('google')))
+        # test_mem = pd.DataFrame(test_mem)
+        # test_mem.reset_index(inplace=True, drop=True)
+        # test_mem.to_csv(os.path.join(op_dir, mem_test_file.format('google')))
 
         # ali
         cpu = get_csv_data(ali_file, wl, pl, 'cpu', ali_scale_table[scale])
